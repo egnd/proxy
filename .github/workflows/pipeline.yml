@@ -44,4 +44,4 @@ jobs:
     needs: [todos, conflicts]
     steps:
       - uses: actions/checkout@v2
-      - run: make images
+      - run: make images EGND_TOR_IMAGE=egnd/proxy:tor EGND_PRIVOXY_IMAGE=egnd/proxy:privoxy

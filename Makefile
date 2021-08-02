@@ -40,7 +40,6 @@ check-master: ## Check for latest master in current branch
 	@echo "All is OK"
 
 images: _env ## Create a proxy image
-	env
 	docker build tor --tag $(EGND_TOR_IMAGE)$(IMG_VERSION)
 	docker build privoxy --tag $(EGND_PRIVOXY_IMAGE)$(IMG_VERSION)
 
