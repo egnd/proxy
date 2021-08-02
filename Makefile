@@ -42,16 +42,16 @@ check-master: ## Check for latest master in current branch
 	@echo "All is OK"
 
 images: _env ## Create a proxy image
-	docker build tor --tag $(EGND_TOR_IMAGE)$(IMG_VERSION)
-	docker build privoxy --tag $(EGND_PRIVOXY_IMAGE)$(IMG_VERSION)
+	docker build tor --tag $$EGND_TOR_IMAGE$$IMG_VERSION
+	docker build privoxy --tag $$EGND_PRIVOXY_IMAGE$$IMG_VERSION
 
 push: images ## Create a proxy image
-	docker push $(EGND_TOR_IMAGE)$(IMG_VERSION)
-	docker push $(EGND_PRIVOXY_IMAGE)$(IMG_VERSION)
+	docker push $$EGND_TOR_IMAGE$$IMG_VERSION
+	docker push $$EGND_PRIVOXY_IMAGE$$IMG_VERSION
 
 scan: images  ## Scan proxy image for vulnerabilities
-	docker scan --dependency-tree --severity=high $(EGND_TOR_IMAGE)
-	docker scan --dependency-tree --severity=high $(EGND_PRIVOXY_IMAGE)
+	docker scan --dependency-tree --severity=high $$EGND_TOR_IMAGE
+	docker scan --dependency-tree --severity=high $$EGND_PRIVOXY_IMAGE
 
 lint: ## Validate Dockerfile
 	docker run --rm -i ghcr.io/hadolint/hadolint:latest-alpine < tor/Dockerfile
