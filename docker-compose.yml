@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  tor:
+    image: ${EGND_TOR_IMAGE}
+    restart: unless-stopped
+    environment:
+      TZ: ${EGND_TZ}
+    env_file:
+      - ./.env
+    ports: 
+      - 127.0.0.1:${EGND_TOR_SOCKS_PORT}:${EGND_TOR_SOCKS_PORT}
+    networks:
+      default:
+        aliases:
+          - ${EGND_TOR_HOST}
+  privoxy:
+    image: ${EGND_PRIVOXY_IMAGE}
+    restart: unless-stopped
+    environment:
+      TZ: ${EGND_TZ}
+    env_file:
+      - ./.env
+    depends_on:
+      - tor
+    ports: 
+      - 127.0.0.1:${EGND_PRIVOXY_PORT}:${EGND_PRIVOXY_PORT}

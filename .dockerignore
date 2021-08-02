@@ -1,4 +1,2 @@
-.dockerignore
-.gitignore
-Dockerfile
-Readme.md
+/.git
+*.log
