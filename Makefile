@@ -5,6 +5,8 @@ export
 
 MAKEFLAGS += --always-make
 
+IMG_VERSION=
+
 .PHONY: help
 
 help:
@@ -40,10 +42,14 @@ check-master: ## Check for latest master in current branch
 	@echo "All is OK"
 
 images: _env ## Create a proxy image
-	docker build tor --tag $(EGND_TOR_IMAGE)
-	docker build privoxy --tag $(EGND_PRIVOXY_IMAGE)
+	docker build tor --tag $(EGND_TOR_IMAGE)$(IMG_VERSION)
+	docker build privoxy --tag $(EGND_PRIVOXY_IMAGE)$(IMG_VERSION)
 
-test: images  ## Scan proxy image for vulnerabilities
+push: images ## Create a proxy image
+	docker push $(EGND_TOR_IMAGE)$(IMG_VERSION)
+	docker push $(EGND_PRIVOXY_IMAGE)$(IMG_VERSION)
+
+scan: images  ## Scan proxy image for vulnerabilities
 	docker scan --dependency-tree --severity=high $(EGND_TOR_IMAGE)
 	docker scan --dependency-tree --severity=high $(EGND_PRIVOXY_IMAGE)
 

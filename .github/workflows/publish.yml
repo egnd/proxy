@@ -1,0 +1,20 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+      with:
+        username: ${{ secrets.DHLGN }}
+        password: ${{ secrets.DHPWD }}
+    - uses: actions/checkout@v2
+    - name: Get tag name
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $EGND_GIT_TAG
+    - run: make push IMG_VERSION=${{ env.RELEASE_VERSION }}
