@@ -52,8 +52,8 @@ scan: images  ## Scan proxy image for vulnerabilities
 	docker scan --dependency-tree --severity=high $(EGND_PRIVOXY_IMAGE)
 
 lint: ## Validate Dockerfile
-	docker run --rm -i ghcr.io/hadolint/hadolint:latest-alpine < tor/Dockerfile
-	docker run --rm -i ghcr.io/hadolint/hadolint:latest-alpine < privoxy/Dockerfile
+	docker run --rm -i ghcr.io/hadolint/hadolint:latest-alpine /bin/hadolint --ignore=DL3008 - < tor/Dockerfile
+	docker run --rm -i ghcr.io/hadolint/hadolint:latest-alpine /bin/hadolint --ignore=DL3008 - < privoxy/Dockerfile
 
 compose: compose-stop ## Run services
 ifeq ($(wildcard docker-compose.override.yml),)
