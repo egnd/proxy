@@ -25,11 +25,11 @@ jobs:
           context: tor
           platforms: linux/amd64,linux/arm64,linux/arm
           push: true
-          tags: ${{env.JOB_IMAGE}}:tor-latest,${{env.JOB_IMAGE}}:tor-${{env.IMG_VERSION}}
+          tags: ${{env.JOB_IMAGE}}:tor-latest,${{env.JOB_IMAGE}}:tor-${{env.RELEASE_VERSION}}
           cache-from: ${{env.JOB_IMAGE}}:tor-latest
       # - uses: azure/container-scan@v0
       #   with:
-      #     image-name: ${{env.JOB_IMAGE}}:tor-${{env.IMG_VERSION}}
+      #     image-name: ${{env.JOB_IMAGE}}:tor-${{env.RELEASE_VERSION}}
 
   build-privoxy:
     runs-on: ubuntu-latest
@@ -49,8 +49,8 @@ jobs:
           context: privoxy
           platforms: linux/amd64,linux/arm64,linux/arm
           push: true
-          tags: ${{env.JOB_IMAGE}}:privoxy-latest,${{env.JOB_IMAGE}}:privoxy-${{env.IMG_VERSION}}
+          tags: ${{env.JOB_IMAGE}}:privoxy-latest,${{env.JOB_IMAGE}}:privoxy-${{env.RELEASE_VERSION}}
           cache-from: ${{env.JOB_IMAGE}}:privoxy-latest
       # - uses: azure/container-scan@v0
       #   with:
-      #     image-name: ${{env.JOB_IMAGE}}:privoxy-${{env.IMG_VERSION}}
+      #     image-name: ${{env.JOB_IMAGE}}:privoxy-${{env.RELEASE_VERSION}}
