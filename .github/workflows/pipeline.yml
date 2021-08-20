@@ -47,10 +47,10 @@ jobs:
           push: false
           tags: ${{env.JOB_IMAGE}}:tor-local
           cache-from: ${{env.JOB_IMAGE}}:tor-latest
-      - name: Scan tor image
-        uses: azure/container-scan@v0
-        with:
-          image-name: ${{env.JOB_IMAGE}}:tor-local
+      # - name: Scan tor image
+      #   uses: azure/container-scan@v0
+      #   with:
+      #     image-name: ${{env.JOB_IMAGE}}:tor-local
       - name: Check tor image
         run: docker run --rm ${{env.JOB_IMAGE}}:tor-local --version
       - name: Build privoxy image
@@ -61,9 +61,9 @@ jobs:
           push: false
           tags: ${{env.JOB_IMAGE}}:privoxy-local
           cache-from: ${{env.JOB_IMAGE}}:privoxy-latest
-      - name: Scan privoxy image
-        uses: azure/container-scan@v0
-        with:
-          image-name: ${{env.JOB_IMAGE}}:privoxy-local
+      # - name: Scan privoxy image
+      #   uses: azure/container-scan@v0
+      #   with:
+      #     image-name: ${{env.JOB_IMAGE}}:privoxy-local
       - name: Check privoxy image
         run: docker run --rm ${{env.JOB_IMAGE}}:privoxy-local --version
