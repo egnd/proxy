@@ -24,24 +24,47 @@ jobs:
         with:
           fetch-depth: 0
       - run: make check-master
-
-  lint:
+  linter:
     runs-on: ubuntu-latest
-    needs: [todos, conflicts]
     steps:
       - uses: actions/checkout@v2
       - run: make lint
-  
-  # scan: @TODO:
-  #   runs-on: ubuntu-latest
-  #   needs: [todos, conflicts]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - run: make scan
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DHLGN }}
+          password: ${{ secrets.DHPWD }}
+      - uses: actions/checkout@v2
+      - run: make scan
 
   build:
     runs-on: ubuntu-latest
-    needs: [todos, conflicts]
+    needs: [todos, conflicts, linter, scan]
+    env:
+      JOB_IMAGE: egnd/proxy
     steps:
       - uses: actions/checkout@v2
-      - run: make images EGND_TOR_IMAGE=egnd/proxy:tor EGND_PRIVOXY_IMAGE=egnd/proxy:privoxy
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
+      - name: Build tor image
+        uses: docker/build-push-action@v2
+        with:
+          context: tor
+          platforms: linux/amd64,linux/arm64,linux/arm
+          push: false
+          tags: ${{env.JOB_IMAGE}}:tor-latest
+          cache-from: ${{env.JOB_IMAGE}}:tor-latest
+      - name: Check tor image
+        run: docker run --rm ${{env.JOB_IMAGE}}:tor-latest --version
+      - name: Build privoxy image
+        uses: docker/build-push-action@v2
+        with:
+          context: privoxy
+          platforms: linux/amd64,linux/arm64,linux/arm
+          push: false
+          tags: ${{env.JOB_IMAGE}}:privoxy-latest
+          cache-from: ${{env.JOB_IMAGE}}:privoxy-latest
+      - name: Check privoxy image
+        run: docker run --rm ${{env.JOB_IMAGE}}:privoxy-latest --version
